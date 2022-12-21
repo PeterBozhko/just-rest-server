@@ -22,12 +22,12 @@ fun Route.authorRouting() {
                 "Missing id",
                 status = HttpStatusCode.BadRequest
             )
-            val book =
+            val author =
                 authorStorage.find { it.id == id } ?: return@get call.respondText(
                     "No author with id $id",
                     status = HttpStatusCode.NotFound
                 )
-            call.respond(book)
+            call.respond(author)
         }
         post {
             val author = call.receive<Author>()
@@ -35,6 +35,15 @@ fun Route.authorRouting() {
             call.respondText("Author stored correctly", status = HttpStatusCode.Created)
 
         }
+
+       put ("{id?}"){
+           val id = call.parameters["id"] ?: return@put call.respond(HttpStatusCode.BadRequest)
+           val newAuthor = call.receive<Author>()
+           val authorId = authorStorage.indexOfFirst { it.id == id }
+           authorStorage[authorId] = newAuthor
+           call.respondText("Author update correctly", status = HttpStatusCode.Accepted)
+       }
+
         delete("{id?}") {
             val id = call.parameters["id"] ?: return@delete call.respond(HttpStatusCode.BadRequest)
             if (authorStorage.removeIf { it.id == id }) {
