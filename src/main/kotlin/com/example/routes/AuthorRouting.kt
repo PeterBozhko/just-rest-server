@@ -7,6 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.*
 
 fun Route.authorRouting() {
     route("/author") {
@@ -31,6 +32,10 @@ fun Route.authorRouting() {
         }
         post {
             val author = call.receive<Author>()
+            val id = call.parameters.getOrFail("id").toInt()
+//            val id = call.parameters.getOrFail("id").toInt()
+//            val id = call.parameters.getOrFail("id").toInt()
+//            val id = call.parameters.getOrFail("id").toInt()
             authorStorage.add(author)
             call.respondText("Author stored correctly with id = ${authorStorage.size - 1}", status = HttpStatusCode.Created)
 
