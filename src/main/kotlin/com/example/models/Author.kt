@@ -6,6 +6,9 @@ import org.jetbrains.exposed.sql.Table
 @Serializable
 data class Author(val id: Int, val firstName: String, val lastName: String, val year: Int)
 
+@Serializable
+data class AuthorRequest(val firstName: String, val lastName: String, val year: Int)
+
 object Authors : Table() {
     val id = integer("id").autoIncrement()
     val firstName = varchar("title", 128)
@@ -14,5 +17,3 @@ object Authors : Table() {
 
     override val primaryKey = PrimaryKey(id)
 }
-
-val authorStorage = mutableListOf<Author>()
